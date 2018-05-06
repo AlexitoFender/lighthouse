@@ -93,10 +93,17 @@ class ReportUIFeatures {
   }
 
   _setupHeaderAnimation() {
+    this.headerSticky = this._dom.find('.lh-header-sticky', this._document);
     this.headerBackground = this._dom.find('.lh-header-bg', this._document);
     this.lighthouseIcon = this._dom.find('.lh-lighthouse', this._document);
     this.scoresWrapper = this._dom.find('.lh-scores-wrapper', this._document);
     this.scoresShadowWrapper = this._dom.find('.lh-scores-wrapper__shadow', this._document);
+    this.productInfo = this._dom.find('.lh-product-info', this._document);
+    this.metdata = this._dom.find('.lh-metadata', this._document);
+    this.toolbar = this._dom.find('.lh-toolbar', this._document);
+
+    this.headerHeight = this.headerBackground.computedStyleMap().get('height').value;
+    this.headerOverlap = this.scoresWrapper.computedStyleMap().get('margin-top').value;
 
     this._document.addEventListener('scroll', this.onScroll, {passive: true});
   }
@@ -151,22 +158,27 @@ class ReportUIFeatures {
   }
 
   onScroll() {
-    this.latestKnownScrollY = this._dom.window().scrollY;
+    this.latestKnownScrollY = this._dom._window.scrollY;
 
     if (!this.isAnimatingHeader) {
-      this._dom.window().requestAnimationFrame(this.animateHeader.bind(this));
+      this._dom._window.requestAnimationFrame(this.animateHeader.bind(this));
     }
     this.isAnimatingHeader = true;
   }
 
   animateHeader() {
-    const percentage = Math.min(1, this.latestKnownScrollY / 172);
-    const sizeAdjustment = (202 - 50) * percentage;
-    this.headerBackground.style.transform = `translate3d(0, ${sizeAdjustment * -1}px, 0)`;
-    this.lighthouseIcon.style.transform = `translate3d(calc(var(--report-content-width) / 2), calc(-100% - ${(202- 50) * percentage}px), 0) scale(${1 - percentage})`;
-    this.lighthouseIcon.style.opacity = Math.max(0, 1 - percentage);
-    this.scoresWrapper.style.transform = `translate3d(0, ${(202 - 80) * percentage * -1}px, 0)`;
-    this.scoresShadowWrapper.style.opacity = 1 - percentage;
+    const collapsedHeaderHeight = 50;
+    const animateScrollPercentage = Math.min(1, this.latestKnownScrollY / (this.headerHeight - collapsedHeaderHeight));
+
+    this.headerSticky.style.transform = `translate3d(0, ${(this.headerHeight - collapsedHeaderHeight + this.headerOverlap) * animateScrollPercentage * -1}px, 0)`;
+    this.headerBackground.style.transform = `translate3d(0, ${animateScrollPercentage * this.headerOverlap}px, 0)`;
+    this.lighthouseIcon.style.transform = `translate3d(calc(var(--report-content-width) / 2), calc(-100% - ${animateScrollPercentage * this.headerOverlap * -1}px), 0) scale(${1 - animateScrollPercentage})`;
+    this.lighthouseIcon.style.opacity = Math.max(0, 1 - animateScrollPercentage);
+    this.scoresShadowWrapper.style.opacity = 1 - animateScrollPercentage;
+    this.toolbar.style.transform = `translate3d(0, ${(this.headerHeight - collapsedHeaderHeight + this.headerOverlap) * animateScrollPercentage}px, 0)`;
+    //this.metdata.style.transform = `translate3d(${50 * animateScrollPercentage}%, ${(this.headerHeight - collapsedHeaderHeight + this.headerOverlap) * animateScrollPercentage}px, 0)`;
+    this.exportButton.style.transform = `scale3d(${1 - (0.2 * animateScrollPercentage)}, ${1 - (0.2 * animateScrollPercentage)}, ${1 - (0.2 * animateScrollPercentage)})`;
+    this.productInfo.style.opacity = animateScrollPercentage < 0.5 ? 0 : (animateScrollPercentage - 0.5) * 2;
 
     this.isAnimatingHeader = false;
   }

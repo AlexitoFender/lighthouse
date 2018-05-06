@@ -39,6 +39,8 @@
   --metric-timeline-rule-color: #b3b3b3;
   --report-width: calc(60 * var(--body-font-size));
   --report-content-width: calc(var(--report-width));
+  --report-header-height: 202px;
+  --report-header-color: #202124;
   --navitem-font-size: var(--body-font-size);
   --navitem-line-height: var(--body-line-height);
   --navitem-hpadding: var(--body-font-size);
@@ -668,8 +670,8 @@ summary {
 .lh-header-sticky {
   position: sticky;
   top: 0;
-  z-index: 1;
   width: 100%;
+  z-index: 1;
 }
 
 .lh-report {

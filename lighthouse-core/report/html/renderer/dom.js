@@ -14,6 +14,8 @@ class DOM {
   constructor(document) {
     /** @private {!Document} */
     this._document = document;
+    /** @private {!Window} */
+    this._window = document.defaultView;
   }
 
   /**
@@ -156,7 +158,7 @@ class DOM {
    * @return {!Window}
    */
   window() {
-    return this._document.defaultView || this._document.parentWindow;
+    return this._window;
   }
 
   /**

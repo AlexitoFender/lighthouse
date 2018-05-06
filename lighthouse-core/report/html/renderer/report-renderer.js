@@ -58,6 +58,7 @@ class ReportRenderer {
     const header = this._dom.cloneTemplate('#tmpl-lh-heading', this._templateContext);
     this._dom.find('.lh-config__timestamp', header).textContent =
         Util.formatDateTime(report.fetchedAt);
+    this._dom.find('.lh-product-info__version', header).textContent = report.lighthouseVersion;
     const url = this._dom.find('.lh-metadata__url', header);
     url.href = report.url;
     url.textContent = report.url;
