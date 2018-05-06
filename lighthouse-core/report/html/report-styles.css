@@ -378,10 +378,10 @@
   color: var(--secondary-text-color);
 }
 
-
-.lh-metric--pass .lh-metric__value {
-  color: var(--pass-color);
+.lh-metric__value {
+  white-space: nowrap; /* No wrapping between metric value and the icon */
 }
+
 
 .lh-metric .lh-metric__value::after {
   content: '';
@@ -393,6 +393,9 @@
   margin-left: calc(var(--body-font-size) / 2);
 }
 
+.lh-metric--pass .lh-metric__value {
+  color: var(--pass-color);
+}
 .lh-metric--pass .lh-metric__value::after {
   background: var(--pass-icon-url) no-repeat 50% 50%;
 }
@@ -409,7 +412,6 @@
 .lh-metric--fail .lh-metric__value {
   color: var(--fail-color);
 }
-
 .lh-metric--fail .lh-metric__value::after {
   background: var(--fail-icon-url) no-repeat 50% 50%;
 }
@@ -525,7 +527,6 @@
 }
 
 .lh-sparkline__bar {
-  background: var(--informative-color);
   height: 100%;
   float: right;
 }
@@ -1005,5 +1006,3 @@ summary.lh-passed-audits-summary {
   75% { opacity: 1; }
   100% { opacity: 1;  filter: drop-shadow(1px 0px 1px #aaa) drop-shadow(0px 2px 4px hsla(206, 6%, 25%, 0.15)); }
 }
-
-/*# sourceURL=report.styles.css */
